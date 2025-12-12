@@ -28,28 +28,34 @@ function createItem(item) {
 	const template = document.getElementById("to-do__item-template");
 	const clone = template.content.querySelector(".to-do__item").cloneNode(true);
   	const textElement = clone.querySelector(".to-do__item-text");
+	const deleteButton = clone.querySelector(".to-do__item-button_type_delete");
+	const duplicateButton = clone.querySelector(".to-do__item-button_type_duplicate");
+	const editButton = clone.querySelector(".to-do__item-button_type_edit");
+
+	textElement.textContent = item;
+
 	textElement.addEventListener("blur", (e) => {
 		textElement.setAttribute("contenteditable", "false");
 		saveTasks(getTasksFromDOM());
-	});
-  	const deleteButton = clone.querySelector(".to-do__item-button_type_delete");
+	});  	
+
 	deleteButton.addEventListener("click", (e) => {
 		clone.remove();
 		saveTasks(getTasksFromDOM());
 	});
-  	const duplicateButton = clone.querySelector(".to-do__item-button_type_duplicate");
+
 	duplicateButton.addEventListener("click", (e) => {
 		const itemName = textElement.textContent;
 		const newItem = createItem(itemName);
 		listElement.prepend(newItem);
 		saveTasks(getTasksFromDOM());
 	});
-  	const editButton = clone.querySelector(".to-do__item-button_type_edit");
+
 	editButton.addEventListener("click", (e) => {
 		textElement.setAttribute("contenteditable", "true");
 		textElement.focus();
 	});
-	textElement.textContent = item;
+
 	return clone
 }
 
@@ -68,7 +74,6 @@ function saveTasks(tasks) {
 }
 
 formElement.addEventListener("submit", (e) => {
-	e.preventDefault();
 	listElement.prepend(createItem(inputElement.value));
 	inputElement.value = "";
 	saveTasks(getTasksFromDOM());
